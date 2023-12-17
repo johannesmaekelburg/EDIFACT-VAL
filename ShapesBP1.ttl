@@ -1,0 +1,1538 @@
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://mapping.example.com/> .
+@prefix cmns-id: <https://www.omg.org/spec/Commons/Identifiers/> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix dc: <http://purl.org/dc/elements/1.1#> .
+@prefix edifact-o: <https://purl.org/edifact/ontology#> .
+@prefix eli: <http://publications.europa.eu/resource/dataset/eli/> .
+@prefix fibo-fbc-fct-fse: <https://spec.edmcouncil.org/fibo/ontology/FBC/FunctionalEntities/FinancialServicesEntities/> .
+@prefix fibo-fbc-pas-caa: <https://spec.edmcouncil.org/fibo/ontology/master/latest/FBC/ProductsAndServices/ClientsAndAccounts/> .
+@prefix fibo-fnd-qt-qtu: <https://spec.edmcouncil.org/fibo/ontology/master/latest/FND/Quantities/QuantitiesAndUnits/> .
+@prefix fibo-fnd-utl-alx: <https://spec.edmcouncil.org/fibo/ontology/master/latest/FND/Utilities/Analytics/> .
+@prefix fnml: <http://semweb.mmlab.be/ns/fnml#> .
+@prefix fno: <https://w3id.org/function/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix frapo: <http://purl.org/cerif/frapo/> .
+@prefix gndo: <https://d-nb.info/standards/elementset/gnd#> .
+@prefix gs1: <https://ref.gs1.org/gs1/vc/declaration-ontology/1.1.0/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix p2p-o: <https://purl.org/p2p-o#> .
+@prefix p2p-o-doc: <https://purl.org/p2p-o/document#> .
+@prefix p2p-o-doc-line: <https://purl.org/p2p-o/documentline#> .
+@prefix p2p-o-inv: <https://purl.org/p2p-o/invoice#> .
+@prefix p2p-o-item: <https://purl.org/p2p-o/item#> .
+@prefix p2p-o-org: <https://purl.org/p2p-o/organization#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix sbeo: <https://w3id.org/sbeo#> .
+@prefix schema: <http://schema.org/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+<http://example.org/myShapesGraph> owl:imports <http://datashapes.org/dash> . 
+
+
+:Dokumentenname 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:documentType;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:in ("Handelsrechnung" "Gutschriftsanzeige" "Wertgutschrift" "Wertbelastung");
+        sh:message "Im BGM Segment fehlt das Datenelment 1001; BGM; ;Kopfteil;fehlt";
+    ]
+.
+
+
+:ExistenzBelegnummer 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:documentNumber;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Im BGM Segment fehlt das Datenelment 1004; BGM; ; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeBelegnummer 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:documentNumber;
+        sh:datatype xsd:string;
+        sh:maxLength 12;
+        sh:message "Im BGM Segment ist das Datenelment 1004 zu lang ; BGM ; ; Kopfteil;fehlt";
+    ]
+.
+
+:Dokumentfunktion 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:documentFunction;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:in ("Stornierung" "Ersatz" "Duplikat" "Original" "Kopie" "Zusaetzliche Uebertragung");
+        sh:message "Im BGM Segment fehlt das Datenelment 1225, d.h. die Angabe der Dokumentfunktion; BGM; ; Kopfteil;fehlt";
+    ]
+.
+
+:Belegdatum 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:documentDate;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das DTM+137 Segment fehlt; DTM; ; Kopfteil;fehlt";
+    ]
+.
+
+:tatsaechliches_Lieferdatum 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path p2p-o-inv:actualDeliveryDate;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das DTM+35 Segment fehlt; DTM ; ; Kopfteil;fehlt"
+    ]
+.
+
+:ExistenzAuftragsnummerLieferantKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:orderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+VN, fehlt im Kopfteil; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeAuftragsnummerLieferantKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:orderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:maxLength 35;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+VN, im Kopfteil ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+:ExistenzDatumAuftragsnummerLieferantKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+VN, fehlt im Kopfteil; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeDatumAuftragsnummerLieferantKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:maxLength 8;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+VN, im Kopfteil ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+:ExistenzAuftragsnummerKaeuferKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:orderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+ON, fehlt im Kopfteil; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeAuftragsnummerKaeuferKopf  
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:orderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:maxLength 35;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+ON, im Kopfteil ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+
+:ExistenzDatumAuftragsnummerKaeuferKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+ON, fehlt im Kopfteil; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeDatumAuftragsnummerKaeuferKopf 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:maxLength 8;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+ON, im Kopfteil ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+:ExistenzLieferscheinnummer 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:deliveryNoteNumber;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+DQ, fehlt; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeLieferscheinnummer
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:deliveryNoteNumber;
+        sh:datatype xsd:string;
+        sh:maxLength 35;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+DQ, ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+:ExistenzDatumLieferscheinnummer
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateDeliveryNoteNumber;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+DQ, fehlt; RFF; SG 3; Kopfteil;fehlt";
+    ]
+.
+
+:LaengeDatumLieferscheinnummer
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:dateDeliveryNoteNumber;
+        sh:datatype xsd:string;
+        sh:maxLength 8;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+DQ, ist zu lang; RFF; SG 3; Kopfteil;fehlerhaft";
+    ]
+.
+
+
+:ExistenzKaeufer
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-doc:E-Invoice;
+    sh:property [
+        sh:path p2p-o-inv:hasBuyer ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment NAD+BY fehlt; NAD; SG 2; Kopfteil;fehlt"
+    ]
+.
+
+:UmsatzsteuernummerKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Segemnt RFF+VA fehlt für das Segemnet NAD+BY, d.h. Angbae des Umsatzsteuernummer des Kaufers; RFF; SG 3; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:VATIdentifier ;
+            sh:minCount 1;
+            sh:maxCount 1;
+            sh:maxLength 14 ;
+        ]
+    ) 
+.
+
+:FormalNameKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3036 fehlt für das Segemnet NAD+BY, d.h. Angabe der formellen Namen des Kaufers; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:formalName ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+:GLNKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3039 fehlt für das Segemnet NAD+BY, d.h. Angabe der GLN des Kaufers; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:globalLocationNumber ;
+            sh:datatype xsd:integer ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:minLength 13;
+            sh:maxLength 13;
+        ]
+    ) 
+.
+
+:StadtKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3164 fehlt für das Segemnet NAD+BY, d.h. Angabe der Stadt des Kaufers; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path edifact-o:hasCity ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:LandKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3207 fehlt für das Segemnet NAD+BY, d.h. Angabe der Landes des Kaufers; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path frapo:hasCountryCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 3;
+        ]
+    ) 
+.
+
+:StrasseKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3042 fehlt für das Segemnet NAD+BY, d.h. Angabe der Straße des Kaufers; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path vcard:hasStreetAddress ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:PLZKaeufer
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3251 fehlt für das Segemnet NAD+BY, d.h. Angabe der PLZ des Kaufers; NAD; SG 2; Kopfteil.";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Kaeufer" ;
+            ] 
+        ]
+        [
+            sh:path vcard:postalCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 9;
+        ]
+    ) 
+.
+
+
+:ExistenzLieferant
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-doc:E-Invoice;
+    sh:property [
+        sh:path p2p-o-inv:hasSupplier ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment NAD+SU fehlt; NAD; SG 2; Kopfteil;fehlt"
+    ]
+.
+
+:UmsatzsteuernummerLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Segemnt RFF+VA fehlt für das Segemnet NAD+SU, d.h. Angbae des Umsatzsteuernummer des Lieferant; RFF; SG 3; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:VATIdentifier ;
+            sh:minCount 1;
+            sh:maxCount 1;
+            sh:maxLength 14 ;
+        ]
+    ) 
+.
+
+:FormalNameLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3036 fehlt für das Segemnet NAD+SU, d.h. Angabe der formellen Namen des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:formalName ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+:GLNLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3039 fehlt für das Segemnet NAD+SU, d.h. Angabe der GLN des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:globalLocationNumber ;
+            sh:datatype xsd:integer ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:minLength 13;
+            sh:maxLength 13;
+        ]
+    ) 
+.
+
+:StadtLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3164 fehlt für das Segemnet NAD+SU, d.h. Angabe der Stadt des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path edifact-o:hasCity ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:LandLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3207 fehlt für das Segemnet NAD+SU, d.h. Angabe der Landes des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path frapo:hasCountryCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 3;
+        ]
+    ) 
+.
+
+:StrasseLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3042 fehlt für das Segemnet NAD+SU, d.h. Angabe der Straße des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path vcard:hasStreetAddress ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:PLZLieferant
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3251 fehlt für das Segemnet NAD+SU, d.h. Angabe der PLZ des Lieferant; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferant" ;
+            ] 
+        ]
+        [
+            sh:path vcard:postalCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 9;
+        ]
+    ) 
+.
+
+:ExistenzRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-doc:E-Invoice;
+    sh:property [
+        sh:path edifact-o:hasInvoicee ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment NAD+IV fehlt; NAD; SG 2; Kopfteil;fehlt"
+    ]
+.
+
+
+:UmsatzsteuernummerRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Segemnt RFF+VA fehlt für das Segemnet NAD+IV, d.h. Angbae des Umsatzsteuernummer des Rechnungsempfaenger; RFF; SG 3; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:VATIdentifier ;
+            sh:minCount 1;
+            sh:maxCount 1;
+            sh:maxLength 14 ;
+            sh:in ("DE121013829" "NL809383810B01" "BE0476450043" "LU21461839")
+        ]
+    ) 
+.
+
+:FormalNameRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3036 fehlt für das Segemnet NAD+IV, d.h. Angabe der formellen Namen des Rechnungsempfaenger; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:formalName ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+:GLNRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3039 fehlt für das Segemnet NAD+IV, d.h. Angabe der GLN des Rechnungsempfaenger; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:globalLocationNumber ;
+            sh:datatype xsd:integer ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:minLength 13;
+            sh:maxLength 13;
+        ]
+    ) 
+.
+
+:StadtRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3164 fehlt für das Segemnet NAD+IV, d.h. Angabe der Stadt des Rechnungsempfaenger; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path edifact-o:hasCity ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:LandRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3207 fehlt für das Segemnet NAD+IV, d.h. Angabe der Landes des Rechnungsempfaeng; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path frapo:hasCountryCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 3;
+        ]
+    ) 
+.
+
+:StrasseRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3042 fehlt für das Segemnet NAD+IV, d.h. Angabe der Straße des Rechnungsempfaenger; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path vcard:hasStreetAddress ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:PLZRechnungsempfaenger
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3251 fehlt für das Segemnet NAD+IV, d.h. Angabe der PLZ des Rechnungsempfaenger; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Rechnungsempfaenger" ;
+            ] 
+        ]
+        [
+            sh:path vcard:postalCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 9;
+        ]
+    ) 
+.
+
+
+:ExistenzLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-doc:E-Invoice;
+    sh:property [
+        sh:path edifact-o:hasDeliveryParty ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment NAD+PR fehlt; NAD; SG 2; Kopfteil;fehlt"
+    ];
+.
+
+
+:UmsatzsteuernummerLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Segemnt RFF+VA fehlt für das Segemnet NAD+DP, d.h. Angbae des Umsatzsteuernummer des Lieferanschrift; RFF;SG 3; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:VATIdentifier ;
+            sh:minCount 1;
+            sh:maxCount 1;
+            sh:maxLength 14 ;
+        ]
+    ) 
+.
+
+:FormalNameLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3036 fehlt für das Segemnet NAD+DP, d.h. Angabe der formellen Namen des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:formalName ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+:GLNLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3039 fehlt für das Segemnet NAD+DP, d.h. Angabe der GLN des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path p2p-o-org:globalLocationNumber ;
+            sh:datatype xsd:integer ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:minLength 13;
+            sh:maxLength 13;
+        ]
+    ) 
+.
+
+:StadtLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3164 fehlt für das Segemnet NAD+DP, d.h. Angabe der Stadt des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path edifact-o:hasCity ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:LandLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3207 fehlt für das Segemnet NAD+DP, d.h. Angabe der Landes des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path frapo:hasCountryCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 3;
+        ]
+    ) 
+.
+
+:StrasseLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3042 fehlt für das Segemnet NAD+DP, d.h. Angabe der Straße des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path vcard:hasStreetAddress ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 35;
+        ]
+    ) 
+.
+
+
+:PLZLieferanschrift
+    a sh:NodeShape ;
+    sh:targetClass org:FormalOrganization ;
+    sh:message "Das Datenelment 3251 fehlt für das Segemnet NAD+DP, d.h. Angabe der PLZ des Lieferanschrift; NAD; SG 2; Kopfteil;fehlt";
+    sh:or (
+        [ 
+            sh:not 
+            [
+		        a sh:PropertyShape ;
+		        sh:path edifact-o:hasFunctionInInvoice ;
+		        sh:hasValue "Lieferanschrift" ;
+            ] 
+        ]
+        [
+            sh:path vcard:postalCode ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1;
+            sh:maxLength 9;
+        ]
+    ) 
+.
+
+
+:Waehrung 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path schema:currency;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das CUX Segment im Rechnungskopf fehlt; CUX; SG 7; Kopfteil;fehlt";
+    ]
+.
+
+
+:EANAtrikelnummer
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:message "Das LIN Segment mit dem Wert EN im Datenelement 7143 fehlt, d.h. die Angabe der EAN-Atrikelnummer oder as PIA-Segment mit dem Wert SA im Datenelement 7143 fehlt, d.h. die Angabe der Artikelnummer des Lieferanten; LIN oder PIA; SG 25; Posotionsteil;fehlt";
+    sh:or (
+        [ 
+            sh:path edifact-o:hasProductIdentification;
+            sh:hasValue "International Article Number" ;
+            sh:datatype xsd:string;
+            sh:minCount 1;
+        ]
+        [
+            sh:path edifact-o:itemNumberSupplier ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:message "Das PIA-Segment mit dem Wert SA im Datenelement 7143 fehlt, d.h. die Angabe der Artikelnummer des Lieferanten. "
+        ]
+    ) 
+.
+
+
+:BerechneteMenge
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property[
+        sh:path edifact-o:deliveredQuantity;
+        sh:datatype xsd:float;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:maxLength 15;
+        sh:message "Das Segment QTY+12 fehlt, d.h. die Angabe der Berechneten Menge; QTY; SG 25; Positionsteil;fehlt"
+    ]
+.
+
+
+:BerechneteMenge
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property[
+        sh:path p2p-o-doc-line:invoicedQuantity;
+        sh:datatype xsd:float;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:maxLength 15;
+        sh:message "Das Segment QTY+47 fehlt, d.h. die Angabe der Berechneten Menge; QTY; SG 25; Positionsteil;fehlt"
+    ]
+.
+
+:Nettopositionspreis
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property[
+        sh:path edifact-o:hasLineItemAmount;
+        sh:datatype xsd:float;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 14;
+        sh:message "Das Segment MOA+203 fehlt, d.h. die Angabe des Nettopositionspreis; MOA; SG 26; Positionsteil;fehlt"
+    ]
+.
+
+:ArtikelNettopreis
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property[
+        sh:path edifact-o:hasNetpriceOfItem;
+        sh:datatype xsd:float;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Das Segment PRI+AAA fehlt, d.h. die Angabe des Nettopreises eines einzelnen Artikels; PRI; SG 28;Positionsteil;fehlt"
+    ]
+.
+
+:ArtikelBruttopreis
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property[
+        sh:path edifact-o:hasGrosspriceOfItem;
+        sh:datatype xsd:float;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Das Segment PRI+AAB fehlt, d.h. die Angabe des Nettopreises eines einzelnen Artikels; PRI; SG 28; Positionsteil;fehlt"
+    ]
+.
+
+:ExistenzAuftragsnummerLieferant
+    a sh:Shape;
+    sh:constraint[
+        sh:path edifact-o:orderNumberSupplier;
+        sh:minCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+VN, fehlt; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:ExistenzAuftragsnummerLieferantArtikel
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:orderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+VN, fehlt im Positionsteil; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:LaengeAuftragsnummerLieferantArtikel
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:orderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:maxLength 35;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+VN, im Positionsteil ist zu lang; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:ExistenzDatumAuftragsnummerLieferantArtikel
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+VN, fehlt im Positionsteil; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:LaengeDatumAuftragsnummerLieferantArtikel
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberSupplier;
+        sh:datatype xsd:string;
+        sh:maxLength 8;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+VN, im Positionsteil ist zu lang; RFF; SG 29; Positionsteil;fehlt ";
+    ]
+.
+
+
+:ExistenzAuftragsnummerKaeuferArtikel
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:orderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+ON, fehlt im Positionsteil; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:LaengeAuftragsnummerKaeuferArtikel 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:orderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:maxLength 35;
+        sh:message "Die Auftragsnummer des Lieferanten, RFF+ON, im Positionsteil ist zu lang; RFF; SG 29; Positionsteil;fehlerhaft";
+    ]
+.
+
+
+:ExistenzDatumAuftragsnummerKaeuferArtikel 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+        sh:maxCount 1;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+ON, fehlt im Positionsteil; RFF; SG 29; Positionsteil;fehlt";
+    ]
+.
+
+:LaengeDatumAuftragsnummerKaeuferArtikel 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:dateOrderNumberBuyer;
+        sh:datatype xsd:string;
+        sh:maxLength 8;
+        sh:message "Das Datum der Auftragsnummer des Lieferanten, RFF+ON, im Positionsteil ist zu lang; RFF; SG 29; Positionsteil;fehlerhaft";
+    ]
+.
+
+
+
+:Rechnungsbetrag
+    a sh:NodeShape;
+    sh:targetClass  edifact-o:InvoiceDetails;
+    sh:property[
+        sh:path edifact-o:hasInvoiceAmount ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 14;
+        sh:message "Das Segment MOA+77 fehlt, d.h. die Angabe des Rechnungsbetrag; MOA; SG 48; Summenteil;fehlt"
+    ]
+.
+
+:Gesamtpositionsbetrag
+    a sh:NodeShape;
+    sh:targetClass  edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:hasTotalLineItemAmount ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment MOA+79 fehlt, d.h. die Angabe des Gesamtpositionsbetrag; MOA; SG 48; Summenteil;fehlt"
+   ]
+.
+
+:SummeZuAbschlaege    
+    a sh:NodeShape;
+    sh:targetClass  edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:hasTotalAdditionsAndDeductions ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment MOA+131 fehlt, d.h. die Angabe der Summen der Zu-/Abschläge; MOA; SG 48; Summenteil;fehlt"
+   ]
+.
+
+:SteuerpflichtigerBetrag
+    a sh:NodeShape;
+    sh:targetClass  edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:hasTaxableAmount ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:message "Das Segment MOA+125 fehlt, d.h. die Angabe des Steuerpflichtiger Betrag; MOA; SG 48; Summenteil;fehlt"
+    ]
+.
+
+
+:zusaetzlichePartneridentifikation
+    a sh:NodeShape;
+    sh:targetClass  org:FormalOrganization;
+    sh:property [
+        sh:path edifact-o:additionalPartnerIdentificationEANCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1;
+        sh:maxLength 35;
+        sh:message "Das Segment RFF+API ist fehlerhaft, d.h. die Angabe der zusätzlichen Partneridentifikation; RFF; SG 3; Kopfteil;fehlerhaft"
+   ]
+.
+
+:Zahlungsbedingung 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:paymentCondition;
+        sh:datatype xsd:string;
+        sh:maxCount 5;
+        sh:in ("Wie ueblich" "Verlaengert");
+        sh:message "Die angebene Zahlungsbedingung gehört nicht zu den erwarteten Werten, d.h. das Datenelement 4279 im PAT Segment ist ungleich 1 oder 7; PAT; SG 8; Kopfteil;fehlerhaft";
+    ]
+.
+
+:ValutaDatum 
+    a sh:NodeShape;
+    sh:targetClass edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:valutaDate;
+        sh:datatype xsd:string;
+        sh:maxCount 1;
+        sh:maxLength 8; 
+        sh:message "Das angegebene Valuta-Datum ist zu lang, d.h. das DTM+209; DTM; SG 8; Kopfteil;fehlerhaft";
+    ]
+.
+
+
+:Abschlag 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:discountReason;
+        sh:datatype xsd:string;
+        sh:minLength 1;
+        sh:maxCount 15;
+        sh:message "Das Datenelemnt 7160 oder 7161 fehlt im ALC Segment, d.h. die Angabe Abschlags Art; ALC; SG 15 ; Kopfteil;fehlt";
+    ]
+.
+
+:Zuschlag 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:allowanceReason;
+        sh:datatype xsd:string;
+        sh:minLength 1;
+        sh:maxCount 15;
+        sh:message "Das Datenelemnt 7160 oder 7161 fehlt im ALC Segment, d.h. die Angabe Zuschlags Art; ALC; SG 15 ; Kopfteil;fehlt";
+    ]
+.
+
+:AbschlagProzentsatz 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:discountPercentage;
+        sh:datatype xsd:float;
+        sh:minLength 1;
+        sh:maxLength 5;
+        sh:maxCount 15;
+        sh:message "Das Datenelemnt 5245 oder 5482 fehlt im PCD Segment, d.h. die Angabe Prozentsatz Art und Höhe des Abschlags; PCD; SG18; Kopfteil;fehlt";
+    ]
+.
+
+:ZuschlagProzentsatz 
+    a sh:NodeShape;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:allowancePercentage;
+        sh:datatype xsd:float;
+        sh:minLength 1;
+        sh:maxLength 5;
+        sh:maxCount 15;
+        sh:message "Das Datenelemnt 5245 oder 5482 fehlt im PCD Segment, d.h. die Angabe Prozentsatz Art und Höhe des Zuschlags; PCD; SG18; Kopfteil;fehlt";
+    ]
+.
+
+:BruttoendbetragRechnunng 
+    a sh:NodeShape;
+    sh:targetClass  p2p-o-item:item;
+    sh:message "Das Segment MOA+8, MOA+23 oder MOA+204 ist fehlerhaft, d.h. die Angabe des Bruttoendbetrags der Rechnung; MOA; SG 19; Kopfteil;fehlerhaft";
+    sh:or(
+        [
+            sh:path p2p-o-inv:hasAllowanceAmount ;
+            sh:maxCount 2;
+            sh:maxLength 13;
+        ]
+        [
+            sh:path edifact-o:hasDiscountAmount ;
+            sh:maxCount 2;
+            sh:maxLength 13;
+        ]
+   )
+.
+
+:SteuerangabenItem
+    a sh:NodeShape;
+    sh:targetClass  p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:hasVATrate ;
+        sh:maxCount 5;
+        sh:maxLength 5;
+        sh:message "Das TAX Segment auf Positionseben ist fehlerhaft, d.h. die Angabe des Steueransatzes; TAX; SG 21; Kopftei;fehlerhaft."
+   ]
+.
+
+:Produktidentifikation
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-item:item;
+    sh:property [
+        sh:path p2p-o-item:itemName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Das Datenelement 7008 im IMD-Segmentist fehlerhaft, d.h. die Angabe der Artikelname; LIN; SG 25; Positionsteil;fehlerhaft "
+   ]
+.
+
+:Steuerbetrag    
+    a sh:NodeShape;
+    sh:targetClass  p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:hasTaxAmount ;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Das Segment MOA+124 ist fehlerhaft , d.h. die Angabe des Steuerbetrags; MOA; SG 33; Positionsteil;fehlerhaft"
+   ]
+.
+
+
+:ZuAbschlagbetrag
+    a sh:NodeShape;
+    sh:targetClass  p2p-o-item:item;
+    sh:message "Das Segment MOA+23 oder MOA+204 ist fehlerhaft, d.h. die Angabe des Zu- oder Abschlagbetrags; MOA; SG 41; Positionsteil;fehlerhaft";
+    sh:or(
+        [
+            sh:path p2p-o-inv:hasAllowanceAmount ;
+            sh:maxCount 2;
+            sh:maxLength 18;
+            sh:message "Das Segment MOA+23 fehlt"
+        ]
+        [
+            sh:path edifact-o:hasDiscountAmount ;
+            sh:maxCount 2;
+            sh:maxLength 18;
+            sh:message "Das Segment MOA+204 fehlt"
+        ]
+   )
+.
+
+
+:BasisZuAbschlagbetrag    
+    a sh:NodeShape;
+    sh:targetClass  p2p-o-item:item;
+    sh:property [
+        sh:path edifact-o:hasAdditionDeductionBasis ;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Das Segment MOA+25 ist fehlerhaft , d.h. der Basisbetrag des Zu- oder Abschlagbetrags; MOA; SG 41; Positionsteil;fehlerhaft"
+   ]
+.
+
+:SteuerangabenInvoice
+    a sh:NodeShape;
+    sh:targetClass  edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:hasVATrate ;
+        sh:maxCount 5;
+        sh:maxLength 5;
+        sh:message "Das TAX Segment auf Summenebene ist fehlerhaft, d.h. die Angabe des Steuersatzes; TAX; SG 50; Summenteil;fehlerhaft"
+   ]
+.
+
+:Steuerbetrag    
+    a sh:NodeShape;
+    sh:targetClass   edifact-o:InvoiceDetails;
+    sh:property [
+        sh:path edifact-o:hasTaxAmount ;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Das Segment MOA+124 ist fehlerhaft , d.h. die Angabe des Steuerbetrags; MOA; SG 50; Summenteil;fehlerhaft"
+   ]
+.
+
+:Prozesszugehoerigkeit 
+    a sh:NodeShape ;
+    sh:targetClass p2p-o-doc:E-Invoice;
+    sh:property [
+        sh:path edifact-o:belongsToProcess ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:hasValue "Ferney";
+        sh:message "A; B; SG 50; Summenteil;fehlerhaft"
+    ]
+.
+
+
+:edifact-oStructure
+    a sh:NodeShape ;
+    sh:targetClass edifact-o:edifact-o-Structure;
+    sh:property [
+        sh:path edifact-o:synatxIdenifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 4;
+        sh:message "Im UNB Segment fehlt das 0001 Datenelement; UNB; ; Kopfteil; fehlt"
+    ]; 
+    sh:property [
+        sh:path edifact-o:synatxVersion ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 1;
+        sh:message "Im UNB Segment fehlt das 0002 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:senderIndicator ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Im UNB Segment fehlt das 0004 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:recipientIndicator ;
+        sh:datatype xsd:intger ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 13;
+        sh:message "Im UNB Segment fehlt das 0010 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:creationDate ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 6;
+        sh:message "Im UNB Segment fehlt das 0017 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:creationTime ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 4;
+        sh:message "Im UNB Segment fehlt das 0019 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:dataExchangeReference ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1;
+        sh:maxLength 14;
+        sh:message "Im UNB Segment fehlt das 0020 Datenelement; UNB; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:totalNumberOfSegments ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxLength 6;
+        sh:message "Im UNT Segment fehlt das 0074 Datenelement; UNT; ; Summenteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:controlSegmentBetweenItemAndTotalPart ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 1 ;
+        sh:message "Im UNS Segment fehlt das 0081 Datenelement; UNS; ; Positionsteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:messageReferenceNumber ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxLength 14 ;
+        sh:message "Im UNT Segment fehlt das 0062 Datenelement; UNT; ; Summenteil; fehlt"
+   ];
+    sh:property [
+        sh:path edifact-o:messageTypeIdentifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 6 ;
+        sh:message "Im UNH Segment fehlt das 0065 Datenelement; UNH; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:versionNumberMessageType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 3 ;
+        sh:message "Im UNH Segment fehlt das 0052 Datenelement; UNH; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:releaseNumberMessageType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 3 ;
+        sh:message "Im UNH Segment fehlt das 0054 Datenelement; UNH; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:managingOrganisations ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 2 ;
+        sh:message "Im UNH Segment fehlt das 0051 Datenelement; UNH; ; Kopfteil; fehlt"
+   ]; 
+    sh:property [
+        sh:path edifact-o:dataExchangeCounter ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:maxLength 6 ;
+        sh:message "Im UNZ Segment fehlt das 0036 Datenelement; UNZ; ; Summenteil; fehlt"
+   ]
+.
